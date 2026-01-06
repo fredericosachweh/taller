@@ -1,0 +1,7 @@
+<html>
+    <body>
+        {% for payment in object_list %}
+            <p>{{ payment.customer.first_name }} paid {{ payment.receiver.first_name }} ${{ payment.value }} {% if payment.description %}for {{ payment.description }}{% endif %}</p>
+        {% endfor %}
+    </body>
+</html>

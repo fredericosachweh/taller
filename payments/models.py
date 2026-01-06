@@ -24,6 +24,7 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     payment_method = models.CharField(choices=PaymentMethodChoice.choices, max_length=1, default=PaymentMethodChoice.Wallet)
     receiver = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='receiver')
+    description = models.TextField(null=True, blank=True)
     class Meta:
         verbose_name = _('Payment')
 
