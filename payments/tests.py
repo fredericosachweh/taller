@@ -134,3 +134,30 @@ class PaymentTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['object'].id, 1)
 
+    def test_list_payments_by_user_and_friends(self):
+        customer_data3 = {
+            'username': 'test3',
+            'email': 'test3@test.com',
+            'first_name': 'test3',
+            'last_name': 'last_test3',
+            'document': 1223434,
+            'password': '1234',
+        }
+        customer3 = Customer.objects.create(**customer_data3)
+        payment_data = {
+            'customer': self.customer1,
+            'receiver': self.customer2,
+            'value': D('200.00')
+        }
+        Payment.objects.create(**payment_data)
+        response = self.client.get(reverse('payments:list', kwargs={'customer_id': self.customer1.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['object_list']), 1)
+        response2 = self.client.get(reverse('payments:list', kwargs={'customer_id': self.customer2.id}))
+        self.assertEqual(response2.status_code, 200)
+        self.assertEqual(len(response2.context['object_list']), 1)
+        customer3.friends.add(self.customer1)
+        response3 = self.client.get(reverse('payments:list', kwargs={'customer_id': customer3.id}))
+        self.assertEqual(response3.status_code, 200)
+        self.assertEqual(len(response3.context['object_list']), 1)
+
