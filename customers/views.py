@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse
 from django.views import generic
 # Create your views here.
 
-from .forms import CustomerModelForm
+from .forms import CustomerModelForm, CustomerFriendsModelForm
 from .models import Customer
 
 
@@ -22,3 +22,11 @@ class CustomerCreateView(generic.CreateView):
     def get_success_url(self):
         return reverse("customers:create")
     
+
+class CustomerFriendsView(generic.UpdateView):
+    model = Customer
+    template_name = 'customers/friends.html'
+    form_class = CustomerFriendsModelForm
+    
+    def get_success_url(self):
+        return reverse("customers:friends", kwargs={'pk': self.kwargs['pk']})

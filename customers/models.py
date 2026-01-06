@@ -25,6 +25,7 @@ class Customer(AbstractUser):
         help_text='Specific permissions for this user.',
         related_query_name='custom_user',
     )
+    friends = models.ManyToManyField('Customer', blank=True)
 
     class Meta:
         verbose_name = _('Customer')
@@ -37,6 +38,7 @@ class Customer(AbstractUser):
 def create_wallet(sender, instance, created, **kwargs):
     if created:
         Wallet.objects.create(customer=instance)
+
 
 class Wallet(models.Model):
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
