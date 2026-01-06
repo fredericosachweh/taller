@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .forms import PaymentModelForm
+from .models import Payment
+
+
+class PaymentAdmin(admin.ModelAdmin):
+    form = PaymentModelForm
+
+admin.site.register(Payment, PaymentAdmin)

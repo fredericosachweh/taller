@@ -5,8 +5,8 @@ from .models import Customer
 
 
 class CustomerModelForm(forms.ModelForm):
-    password = forms.CharField()
-    confirm_password = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
 
     def clean(self):
         data = super().clean()
