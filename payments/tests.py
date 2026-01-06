@@ -93,7 +93,7 @@ class PaymentTestCase(TestCase):
             'value': D('200.00')
         }
         Payment.objects.create(**payment_data)
-        response = self.client.get(reverse('payments:list'), data=payment_data)
+        response = self.client.get(reverse('payments:list'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['object_list']), 1)
 
@@ -113,13 +113,24 @@ class PaymentTestCase(TestCase):
             'value': D('200.00')
         }
         Payment.objects.create(**payment_data)
-        response = self.client.get(reverse('payments:list', kwargs={'customer_id': self.customer1.id}), data=payment_data)
+        response = self.client.get(reverse('payments:list', kwargs={'customer_id': self.customer1.id}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['object_list']), 1)
-        response2 = self.client.get(reverse('payments:list', kwargs={'customer_id': self.customer2.id}), data=payment_data)
+        response2 = self.client.get(reverse('payments:list', kwargs={'customer_id': self.customer2.id}))
         self.assertEqual(response2.status_code, 200)
         self.assertEqual(len(response2.context['object_list']), 1)
-        response3 = self.client.get(reverse('payments:list', kwargs={'customer_id': customer3.id}), data=payment_data)
+        response3 = self.client.get(reverse('payments:list', kwargs={'customer_id': customer3.id}))
         self.assertEqual(response3.status_code, 200)
         self.assertEqual(len(response3.context['object_list']), 0)
+
+    def test_payment_detail(self):
+        payment_data = {
+            'customer': self.customer1,
+            'receiver': self.customer2,
+            'value': D('200.00')
+        }
+        payment = Payment.objects.create(**payment_data)
+        response = self.client.get(reverse('payments:detail', kwargs={'pk': payment.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['object'].id, 1)
 

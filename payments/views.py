@@ -27,5 +27,10 @@ class PaymentListView(generic.ListView):
         if customer_id:
             qs = qs.filter(Q(customer_id=customer_id)|Q(receiver_id=customer_id))
         return qs
+    
+
+class PaymentDetailView(generic.DetailView):
+    model = Payment
+    template_name = 'payments/detail.html'
 
     
